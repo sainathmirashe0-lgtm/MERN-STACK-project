@@ -4,10 +4,12 @@ import cors from "cors";
 import router from "./router/router.js";
 import connectionDB from "./db.js";
 import cookieParser from "cookie-parser";
+import "dotenv/config";
+
 
 const app = express();
-const PORT = process.env.PORT || 3000;
 
+const PORT = process.env.PORT || 3000;
 app.use(
   cors({
     origin: [
@@ -27,11 +29,11 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use("/", router);
 
+
+
 async function startServer() {
   try {
     await connectionDB();
-
-    const PORT = process.env.PORT || 3000;
 
     app.listen(PORT, "0.0.0.0", () => {
       console.log(`Server running on port ${PORT}`);
