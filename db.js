@@ -1,13 +1,21 @@
+
 import mongoose from "mongoose";
 
-function connectionDB() {
-    mongoose.connect("mongodb://localhost:27017/myDatabase?retryWrites=false")
-    .then(()=>{
-        console.log("datbase is connect to server")
-    })
-    .catch(err=>{
-        console.log("error occured");
-         process.exit(1);
-    })
+async function connectionDB() {
+  try {
+    const mongoURI = process.env.MONGODB_URI;
+
+    if (!mongoURI) {
+      throw new Error("MONGODB_URI is not configured");
+    }
+
+    await mongoose.connect(mongoURI);
+
+    console.log("Database connected successfully");
+  } catch (error) {
+    console.error("MongoDB connection failed:", error.message);
+    throw error;
+  }
 }
+
 export default connectionDB;
