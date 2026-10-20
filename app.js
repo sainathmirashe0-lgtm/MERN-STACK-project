@@ -1,21 +1,44 @@
+
 import express from "express";
-import cors from 'cors';
+import cors from "cors";
 import router from "./router/router.js";
-import userSchema from "./models/Student.js";
 import connectionDB from "./db.js";
 import cookieParser from "cookie-parser";
-connectionDB()
+
 const app = express();
-app.use(cors({
-  origin: 'http://localhost:5173'
-}));
 
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173",
+      // Add your deployed frontend URL here
+    ],
+    credentials: true,
+  })
+);
 
-app.use(cookieParser())
+app.use(cookieParser());
 app.set("view engine", "ejs");
 app.set("views", "./views");
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use("/",router)
+app.use("/", router);
 
+const PORT = process.env.PORT || 3000;
+
+async function startServer() {
+  try {
+     await connectionDB();
+
+    app.listen(PORT, "0.0.0.0", () => {
+      console.log(`Server running on port ${PORT}`);
+    });
+  } catch (error) {
+    console.error("Failed to start server:", error);
+    process.exit(1);
+  }
+}
+
+startServer();
