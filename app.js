@@ -31,8 +31,10 @@ async function startServer() {
   try {
     await connectionDB();
 
-    app.listen(PORT, "0.0.0.0", () => {
-      console.log(`Server running on port ${PORT}`);
+    app.listen(process.env.PORT || 3000, "0.0.0.0", () => {
+      console.log(
+        `Server running on port ${process.env.PORT || 3000}`
+      );
     });
   } catch (error) {
     console.error("Failed to start server:", error);
